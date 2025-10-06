@@ -77,10 +77,14 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
       return '2px solid #e0e0e0';
     };
 
+    const nameParts = student.getFullName().split(' ');
+    const lastName = nameParts[0] || '';
+    const firstName = nameParts.slice(1).join(' ') || '';
+
     return (
-      <Box 
+      <Box
         className="student-box"
-        sx={{ 
+        sx={{
           height: 60,
           p: 0.5,
           bgcolor: getVisionColor(student.getVision()),
@@ -92,11 +96,11 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
           position: 'relative'
         }}
       >
-        <Typography 
-          variant="caption" 
-          sx={{ 
+        <Typography
+          variant="caption"
+          sx={{
             fontWeight: 'medium',
-            lineHeight: 1,
+            lineHeight: 1.1,
             textAlign: 'center',
             fontSize: '0.7rem',
             overflow: 'hidden',
@@ -104,7 +108,21 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
             whiteSpace: 'nowrap'
           }}
         >
-          {student.getFullName()}
+          {lastName}
+        </Typography>
+        <Typography
+          variant="caption"
+          sx={{
+            fontWeight: 'normal',
+            lineHeight: 1.1,
+            textAlign: 'center',
+            fontSize: '0.65rem',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {firstName}
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.2, mt: 0.2 }}>
           <Typography variant="caption" sx={{ fontSize: '0.6rem', color: 'text.secondary' }}>
