@@ -2,7 +2,7 @@
   "name": "seating-project-react",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://brovar002.github.io/seatingProject",
+  "homepage": "https://tatigonch.github.io/seatingProject",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
