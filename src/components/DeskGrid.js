@@ -9,7 +9,7 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
     try {
       const element = printRef.current;
       const canvas = await html2canvas(element, {
-        scale: 2, // Увеличиваем разрешение для лучшего качества
+        scale: 2,
         useCORS: true,
         allowTaint: false,
         backgroundColor: '#ffffff',
@@ -19,12 +19,10 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
         scrollY: 0,
       });
 
-      // Создаем ссылку для скачивания
       const link = document.createElement('a');
       link.download = `схема-класса-${new Date().toLocaleDateString('ru-RU')}.png`;
       link.href = canvas.toDataURL('image/png');
-      
-      // Автоматически скачиваем файл
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

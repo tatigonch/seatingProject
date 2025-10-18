@@ -5,22 +5,13 @@ export const arrangeStudents = (students, currentDesks) => {
   const desks = currentDesks.map(() => new Desk());
   const columnCount = 3;
 
-  // Helper functions - same logic as Java version
+  // Helper functions
   const getVisionPriority = (vision) => {
     switch (vision) {
       case 'Плохое': return 1;
-      case 'Среднее': return 2;
-      case 'Хорошее': return 3;
-      default: return 4;
+      case 'Хорошее': return 2;
+      default: return 3;
     }
-  };
-
-  const getHeightPriority = (height) => {
-    const numHeight = parseInt(height);
-    if (numHeight < 160) return 1; // Низкий
-    if (numHeight >= 160 && numHeight < 175) return 2; // Средний
-    if (numHeight >= 175) return 3; // Высокий
-    return 2; // default средний
   };
 
   const shuffleMaintainingOrder = (studentsList) => {
@@ -51,19 +42,18 @@ export const arrangeStudents = (students, currentDesks) => {
     }
   };
 
-  // Clear all desks first
   desks.forEach(desk => desk.clear());
 
-  // Separate students into priority groups - same logic as Java
   const highAndBadVisionStudents = students
     .filter(s => s.getVision().includes('Плохое') && parseInt(s.getHeight()) >= 175)
     .sort((a, b) => {
       const visionCompare = getVisionPriority(a.getVision()) - getVisionPriority(b.getVision());
       if (visionCompare !== 0) return visionCompare;
-      
-      const heightCompare = getHeightPriority(a.getHeight()) - getHeightPriority(b.getHeight());
+
+      // Sort by height: lower height = higher priority (sit in front)
+      const heightCompare = parseInt(a.getHeight()) - parseInt(b.getHeight());
       if (heightCompare !== 0) return heightCompare;
-      
+
       return a.getConflicts().size - b.getConflicts().size;
     });
 
@@ -72,18 +62,17 @@ export const arrangeStudents = (students, currentDesks) => {
     .sort((a, b) => {
       const visionCompare = getVisionPriority(a.getVision()) - getVisionPriority(b.getVision());
       if (visionCompare !== 0) return visionCompare;
-      
-      const heightCompare = getHeightPriority(a.getHeight()) - getHeightPriority(b.getHeight());
+
+      // Sort by height: lower height = higher priority (sit in front)
+      const heightCompare = parseInt(a.getHeight()) - parseInt(b.getHeight());
       if (heightCompare !== 0) return heightCompare;
-      
+
       return a.getConflicts().size - b.getConflicts().size;
     });
 
-  // Shuffle maintaining order
   const shuffledHighAndBad = shuffleMaintainingOrder(highAndBadVisionStudents);
   const shuffledOthers = shuffleMaintainingOrder(otherStudents);
 
-  // Place high and bad vision students first - same logic as Java
   let deskIndex = 0;
   let leftRowCount = 0;
   let rightRowCount = 0;
@@ -113,7 +102,6 @@ export const arrangeStudents = (students, currentDesks) => {
     }
   }
 
-  // Place other students - basic placement without preferred neighbors
   deskIndex = 0;
   for (const student of shuffledOthers) {
     if (deskIndex >= desks.length) {
@@ -140,15 +128,12 @@ export const arrangeStudents = (students, currentDesks) => {
     }
   }
 
-  // After basic placement, try to arrange preferred neighbors on the same desk
   applyPreferredNeighbors(desks, students);
 
   return desks;
 };
 
-// Helper function to apply preferred neighbor logic after initial placement
 const applyPreferredNeighbors = (desks, students) => {
-  // Build a map of student to desk index and position
   const studentLocation = new Map();
   desks.forEach((desk, deskIndex) => {
     if (desk.getStudent1()) {
@@ -159,7 +144,6 @@ const applyPreferredNeighbors = (desks, students) => {
     }
   });
 
-  // Try to swap students to place preferred neighbors together
   for (const student of students) {
     const preferredNeighbors = Array.from(student.getPreferredNeighbors());
     if (preferredNeighbors.length === 0) continue;
@@ -172,17 +156,14 @@ const applyPreferredNeighbors = (desks, students) => {
       ? studentDesk.getStudent2()
       : studentDesk.getStudent1();
 
-    // Check if already sitting with preferred neighbor
     if (deskmate && student.getPreferredNeighbors().has(deskmate)) {
       continue;
     }
 
-    // Try to find a preferred neighbor to swap with
     for (const preferredNeighbor of preferredNeighbors) {
       const preferredLoc = studentLocation.get(preferredNeighbor);
       if (!preferredLoc) continue;
 
-      // Check if they would conflict
       if (student.getConflicts().has(preferredNeighbor)) continue;
 
       const preferredDesk = desks[preferredLoc.deskIndex];
@@ -190,15 +171,8 @@ const applyPreferredNeighbors = (desks, students) => {
         ? preferredDesk.getStudent2()
         : preferredDesk.getStudent1();
 
-      // Try swapping: move preferredNeighbor to sit with student
-      // and move deskmate to sit with preferredDeskmate (if exists)
-
-      // Validate the swap won't create conflicts
       let canSwap = true;
 
-      // Check if preferredNeighbor and student are compatible (already checked above)
-
-      // Check if deskmate and preferredDeskmate are compatible
       if (deskmate && preferredDeskmate) {
         if (deskmate.getConflicts().has(preferredDeskmate) ||
             preferredDeskmate.getConflicts().has(deskmate)) {
@@ -207,7 +181,6 @@ const applyPreferredNeighbors = (desks, students) => {
       }
 
       if (canSwap) {
-        // Perform the swap
         if (studentLoc.position === 1) {
           studentDesk.setStudent2(preferredNeighbor);
         } else {
@@ -220,7 +193,6 @@ const applyPreferredNeighbors = (desks, students) => {
           preferredDesk.setStudent2(deskmate);
         }
 
-        // Update location map
         if (deskmate) {
           studentLocation.set(deskmate, {
             deskIndex: preferredLoc.deskIndex,
@@ -232,7 +204,6 @@ const applyPreferredNeighbors = (desks, students) => {
           position: studentLoc.position === 1 ? 2 : 1
         });
 
-        // Successfully placed preferred neighbor, stop searching
         break;
       }
     }

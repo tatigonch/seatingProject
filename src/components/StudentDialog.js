@@ -261,7 +261,6 @@ const StudentDialog = ({
               label="Зрение"
             >
               <MenuItem value="Хорошее">Хорошее</MenuItem>
-              <MenuItem value="Среднее">Среднее</MenuItem>
               <MenuItem value="Плохое">Плохое</MenuItem>
             </Select>
           </FormControl>

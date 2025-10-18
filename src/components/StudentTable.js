@@ -46,18 +46,9 @@ const StudentTable = ({
   const getVisionColor = (vision) => {
     switch (vision) {
       case 'Плохое': return 'error';
-      case 'Среднее': return 'warning';
       case 'Хорошее': return 'success';
       default: return 'default';
     }
-  };
-
-  const getHeightColor = (height) => {
-    const numHeight = parseInt(height);
-    if (numHeight < 160) return 'info';
-    if (numHeight >= 160 && numHeight < 175) return 'default';
-    if (numHeight >= 175) return 'secondary';
-    return 'default';
   };
 
   if (students.length === 0) {
@@ -124,12 +115,7 @@ const StudentTable = ({
                   />
                 </TableCell>
                 <TableCell>
-                  <Chip 
-                    label={`${student.getHeight()} см`} 
-                    size="small"
-                    color={getHeightColor(student.getHeight())}
-                    variant="outlined"
-                  />
+                  {student.getHeight()} см
                 </TableCell>
                 <TableCell>
                   {Array.from(student.getConflicts()).length > 0 ? (
