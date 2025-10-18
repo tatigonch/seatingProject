@@ -61,18 +61,13 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
     const getVisionColor = (vision) => {
       switch (vision) {
         case 'Плохое': return '#ffebee';
-        case 'Среднее': return '#fff3e0';
         case 'Хорошее': return '#e8f5e8';
         default: return '#f5f5f5';
       }
     };
 
-    const getHeightBorder = (height) => {
-      const numHeight = parseInt(height);
-      if (numHeight < 160) return '2px solid #2196f3'; // Низкий - синий
-      if (numHeight >= 160 && numHeight < 175) return '2px solid #4caf50'; // Средний - зеленый  
-      if (numHeight >= 175) return '2px solid #ff9800'; // Высокий - оранжевый
-      return '2px solid #e0e0e0';
+    const getHeightBorder = () => {
+      return '2px solid #9e9e9e';
     };
 
     const nameParts = student.getFullName().split(' ');
@@ -86,7 +81,7 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
           height: 60,
           p: 0.5,
           bgcolor: getVisionColor(student.getVision()),
-          border: getHeightBorder(student.getHeight()),
+          border: getHeightBorder(),
           borderRadius: 1,
           display: 'flex',
           flexDirection: 'column',
@@ -278,10 +273,6 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
             <Typography variant="caption">Плохое зрение</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <Box sx={{ width: 12, height: 12, bgcolor: '#fff3e0', border: '1px solid #ff9800' }} />
-            <Typography variant="caption">Среднее зрение</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <Box sx={{ width: 12, height: 12, bgcolor: '#e8f5e8', border: '1px solid #4caf50' }} />
             <Typography variant="caption">Хорошее зрение</Typography>
           </Box>
@@ -290,9 +281,6 @@ const DeskGrid = forwardRef(({ desks, columnCount = 3 }, ref) => {
             <Typography variant="caption">Есть конфликты</Typography>
           </Box>
         </Box>
-        <Typography variant="caption" color="textSecondary" sx={{ mt: 1, display: 'block' }}>
-          Границы: Синий - низкий рост (&lt;160см), Зеленый - средний рост (160-174см), Оранжевый - высокий рост (≥175см)
-        </Typography>
       </Box>
       </Box>
     </Box>
