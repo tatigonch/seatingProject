@@ -28,7 +28,7 @@ const StudentDialog = ({
   const [formData, setFormData] = useState({
     fullName: '',
     vision: 'Хорошее',
-    height: 160,
+    height: '',
     conflicts: [],
     preferredNeighbors: []
   });
@@ -47,7 +47,7 @@ const StudentDialog = ({
       setFormData({
         fullName: '',
         vision: 'Хорошее',
-        height: 160,
+        height: '',
         conflicts: [],
         preferredNeighbors: []
       });
@@ -64,10 +64,6 @@ const StudentDialog = ({
     
     if (!formData.vision) {
       newErrors.vision = 'Пожалуйста, выберите зрение';
-    }
-    
-    if (!formData.height || formData.height < 140 || formData.height > 200) {
-      newErrors.height = 'Введите рост от 140 до 200 см';
     }
 
     // Check for duplicate name (except when editing the same student)
@@ -269,12 +265,11 @@ const StudentDialog = ({
             label="Рост (см)"
             type="number"
             value={formData.height}
-            onChange={(e) => handleFieldChange('height', parseInt(e.target.value) || 160)}
+            onChange={(e) => handleFieldChange('height', parseInt(e.target.value) || '')}
             error={!!errors.height}
             helperText={errors.height}
             fullWidth
             variant="outlined"
-            inputProps={{ min: 140, max: 200 }}
           />
 
           <Box>
